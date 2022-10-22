@@ -1,7 +1,8 @@
 // MODULES
 import styled from "styled-components";
-import { Link } from "react-router-dom";
+import { Link, Navigate} from "react-router-dom";
 import { useState, useEffect } from "react";
+import axios from "axios";
 
 // FILES
 import logo from "../Assets/Logo.svg";
@@ -14,33 +15,37 @@ export default function Register(){
     const [image, setImage] = useState("");
 
     function registeruser(e){
+        console.log("ENTROU NA FUNÇÃO DE REGISTRO");	
         e.preventDefault();
-        const body = {
-            email,
-            password,
-            name,
-            image
-        }
-        console.log("CADASTROU USUARIO");
-        console.log(body);
-        // const request = axios.post("https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/auth/sign-up", body);
-        // request.then(response => {
-        //     console.log(response);
-        // })
-        // request.catch(error => {
-        //     console.log(error);
-        // })
-    }
+        
+        const body = {email, password, name, image}
 
+            if(email === "" || password === "" || name === ""){
+                alert("Preencha todos os campos");
+            }
+            else{
+            console.log("CAMPOS FORAM PREENCHIDOS CORRETAMENTE");
+            const promise = axios.post("https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/auth/sign-up", body);
+            promise.then(response => {
+                console.log(response);
+                console.log("CADASTROU USUARIO");
+                console.log(body);
+                <Navigate to={"/"}/>
+            })
+            promise.catch(error => {
+                console.log("DEU ERRADO: ",error);
+            })
+        }
+    }
 
     return(
         <AlignItems>
             <Logo src={logo} alt="Logo"/>
             <Form onSubmit={registeruser}>
-                <Email data-identifier="input-email" type="email" placeholder="email" value={email} onChange={(e) => {setEmail(e.target.value)}}/>
-                <Password data-identifier="input-password" type="password" placeholder="senha" value={password} onChange={(e) => {setPassword(e.target.value)}}/>
-                <Name data-identifier="input-name" placeholder="nome" value={name} onChange={(e) => {setName(e.target.value)}}/>
-                <Photo data-identifier="input-photo" placeholder="foto" value={image} onChange={(e) => {setImage(e.target.value)}}/>
+                <Email porps={email} data-identifier="input-email" type="email" placeholder="email" value={email} onChange={(e) => {setEmail(e.target.value)}}/>
+                <Password props={password} data-identifier="input-password" type="password" placeholder="senha" value={password} onChange={(e) => {setPassword(e.target.value)}}/>
+                <Name props={name} data-identifier="input-name" placeholder="nome" value={name} onChange={(e) => {setName(e.target.value)}}/>
+                <Photo props={image} data-identifier="input-photo" placeholder="foto" value={image} onChange={(e) => {setImage(e.target.value)}}/>
                 <Button data-identifier="sign-up-btn" type="subimit">Cadastrar</Button>
             </Form>
             <Link data-identifier="sign-in-action" to={"/"}><Cadastrese>Já tem uma conta? Faça login!</Cadastrese></Link>
@@ -77,7 +82,7 @@ const Email = styled.input`
     font-weight: 400;
     font-size: 19.976px;
     line-height: 25px;
-    color: #DBDBDB;
+    color: ${props => props.props != "" ? "black" : "#DBDBDB"};
     `
 
 const Password = styled.input`
@@ -93,7 +98,7 @@ const Password = styled.input`
     font-weight: 400;
     font-size: 19.976px;
     line-height: 25px;
-    color: #DBDBDB;
+    color: ${props => props.props != "" ? "black" : "#DBDBDB"};
 `
 
 const Name = styled.input`
@@ -109,7 +114,7 @@ const Name = styled.input`
     font-weight: 400;
     font-size: 19.976px;
     line-height: 25px;
-    color: #DBDBDB;
+    color: ${props => props.props != "" ? "black" : "#DBDBDB"};
 `
 
 const Photo = styled.input`
@@ -119,13 +124,12 @@ const Photo = styled.input`
     background: #FFFFFF;
     border: 1px solid #D5D5D5;
     border-radius: 5px;
-
     font-family: 'Lexend Deca';
     font-style: normal;
     font-weight: 400;
     font-size: 19.976px;
     line-height: 25px;
-    color: #DBDBDB;
+    color: ${props => props.props != "" ? "black" : "#DBDBDB"};
 `
 
 const Button = styled.button`
