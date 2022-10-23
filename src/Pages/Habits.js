@@ -1,7 +1,13 @@
+// Components
+import TopBar from "../Components/TopBar";
+import BottomBar from "../Components/BottomBar";
+
+
 export default function Habits(){
     return(
         <div>
-            <h1>Habits</h1>
+            <TopBar/>
+            <BottomBar/>
         </div>
     )
 }

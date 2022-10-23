@@ -1,7 +1,7 @@
 // MODULES
 import styled from "styled-components";
 import { Link, Navigate} from "react-router-dom";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import axios from "axios";
 
 // FILES
@@ -46,7 +46,7 @@ export default function Register(){
                 <Password props={password} data-identifier="input-password" type="password" placeholder="senha" value={password} onChange={(e) => {setPassword(e.target.value)}}/>
                 <Name props={name} data-identifier="input-name" placeholder="nome" value={name} onChange={(e) => {setName(e.target.value)}}/>
                 <Photo props={image} data-identifier="input-photo" placeholder="foto" value={image} onChange={(e) => {setImage(e.target.value)}}/>
-                <Button data-identifier="sign-up-btn" type="subimit">Cadastrar</Button>
+                <Button data-identifier="sign-up-btn" type="submit">Cadastrar</Button>
             </Form>
             <Link data-identifier="sign-in-action" to={"/"}><Cadastrese>Já tem uma conta? Faça login!</Cadastrese></Link>
         </AlignItems>
@@ -82,7 +82,7 @@ const Email = styled.input`
     font-weight: 400;
     font-size: 19.976px;
     line-height: 25px;
-    color: ${props => props.props != "" ? "black" : "#DBDBDB"};
+    color: ${props => props.props !== "" ? "black" : "#DBDBDB"};
     `
 
 const Password = styled.input`
@@ -98,7 +98,7 @@ const Password = styled.input`
     font-weight: 400;
     font-size: 19.976px;
     line-height: 25px;
-    color: ${props => props.props != "" ? "black" : "#DBDBDB"};
+    color: ${props => props.props !== "" ? "black" : "#DBDBDB"};
 `
 
 const Name = styled.input`
@@ -114,7 +114,7 @@ const Name = styled.input`
     font-weight: 400;
     font-size: 19.976px;
     line-height: 25px;
-    color: ${props => props.props != "" ? "black" : "#DBDBDB"};
+    color: ${props => props.props !== "" ? "black" : "#DBDBDB"};
 `
 
 const Photo = styled.input`
@@ -129,7 +129,7 @@ const Photo = styled.input`
     font-weight: 400;
     font-size: 19.976px;
     line-height: 25px;
-    color: ${props => props.props != "" ? "black" : "#DBDBDB"};
+    color: ${props => props.props !== "" ? "black" : "#DBDBDB"};
 `
 
 const Button = styled.button`

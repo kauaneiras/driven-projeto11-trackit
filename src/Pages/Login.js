@@ -1,21 +1,61 @@
 // MODULES
 import styled from "styled-components";
-import { Link } from "react-router-dom";
+import axios from "axios";
+import { useState } from "react";
+import { Link, Navigate } from "react-router-dom";
+
 
 
 // FILES
 import logo from "../Assets/Logo.svg";
+import RenderButton from "../Components/RenderButton";
 
 export default function App() {
-  return (
-    <AlignItems>
-        <Logo src={logo} alt="Logo"/>
-        <Email data-identifier="input-email" type="email" placeholder="email"/>
-        <Password data-identifier="input-password" type="password" placeholder="senha"/>
-        <Button data-identifier="login-btn">Entrar</Button>
-        <Link data-identifier="sign-up-action" to={"/cadastro"}><Cadastrese>Não tem uma conta? Cadastre-se!</Cadastrese></Link>
-    </AlignItems>
-  );
+
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const [disabled, setDisabled] = useState(false);
+    const [nextPage, setNextPage] = useState(false);
+
+    function loginuser(e){
+        e.preventDefault();
+        console.log("ENTROU NA FUNÇÃO DE LOGIN");
+        const body = {email, password}
+        setDisabled(true);
+        if(email === "" || password === ""){
+            alert("Preencha todos os campos");
+            setDisabled(false);
+        }
+        else{
+            console.log("CAMPOS FORAM PREENCHIDOS CORRETAMENTE");
+            const promise = axios.post("https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/auth/login", body);
+            promise.then(response => {
+                console.log(response);
+                console.log("LOGOU USUARIO");
+                console.log(body);
+                localStorage.setItem("user", JSON.stringify({token: response.data.token, image: response.data.image, name: response.data.name}));
+                setNextPage(true);
+            })
+            promise.catch(error => {
+                console.log("DEU ERRADO: ",error);
+            })
+        }
+    }
+
+    if(nextPage){
+        return <Navigate to={"/habitos"} />
+    }else
+        {return (
+                <AlignItems>
+                    <Logo src={logo} alt="Logo"/>
+                    <Form onSubmit={loginuser}>
+                        <Email data-identifier="input-email" props={email} type="email" placeholder="email" value={email} onChange={(e) => {setEmail(e.target.value)}}/>
+                        <Password data-identifier="input-password" props={password} type="password" placeholder="senha" value={password} onChange={(e) => {setPassword(e.target.value)}}/>
+                        <Button data-identifier="login-btn" type="submit"><RenderButton text={"Entrar"} state={disabled}/></Button>
+                    </Form>
+                    <Link data-identifier="sign-up-action" to={"/cadastro"}><Cadastrese>Não tem uma conta? Cadastre-se!</Cadastrese></Link>
+                </AlignItems>
+            );}
 }
 
 const AlignItems = styled.div`
@@ -30,6 +70,11 @@ const Logo = styled.img`
     height: 180px;
 `
 
+const Form = styled.form`
+    display: flex;
+    flex-direction: column;
+`
+
 const Email = styled.input`
     box-sizing: border-box;
     width: 303px;
@@ -42,7 +87,7 @@ const Email = styled.input`
     font-weight: 400;
     font-size: 19.976px;
     line-height: 25px;
-    color: #DBDBDB;
+    color: ${props => props.props !== "" ? "black" : "#DBDBDB"};
     `
 
 const Password = styled.input`
@@ -58,7 +103,7 @@ const Password = styled.input`
     font-weight: 400;
     font-size: 19.976px;
     line-height: 25px;
-    color: #DBDBDB;
+    color: ${props => props.props !== "" ? "black" : "#DBDBDB"};
 `
 const Button = styled.button`
     width: 303px;
@@ -71,6 +116,7 @@ const Button = styled.button`
     font-size: 20.976px;
     line-height: 26px;
     text-align: center;
+    
     color: #FFFFFF;
 `
 
